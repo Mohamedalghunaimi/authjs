@@ -4,15 +4,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
+import Loading from './loading';
 
 const LoginForm = () => {
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [showOtpInput,setShowOtpInput] = useState(false)
-    const [code,setCode] = useState('')
+    const [code,setCode] = useState('');
+    const [loading,setLoading] = useState(false)
 
     const loginOpertaion = async(e:React.SubmitEvent) => {
         e.preventDefault() ;
+        setLoading(true)
         try {
             const result = await login({email,password,code})
             if(!result.success) {
@@ -25,6 +28,8 @@ const LoginForm = () => {
 
         } catch (error) {
             console.error(error)
+        } finally {
+            setLoading(false)
         }
 
     }
@@ -44,10 +49,14 @@ const LoginForm = () => {
         </Link>
             </>
         }
-
+        {
+            loading? <Loading />:
         <button type='submit' className=' bg-blue-500 py-2.5 capitalize text-xl font-semibold text-white rounded-lg mt-2.5 duration-300 hover:bg-blue-800  cursor-pointer'>
             login
         </button>
+        }
+
+
     
 
     </form>
