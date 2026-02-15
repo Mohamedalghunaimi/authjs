@@ -30,7 +30,7 @@ export async function login(data:z.infer<typeof LoginSchema>) {
         }
         if(!user?.emailVerified) {
             const token = await getVerificationToken(email)
-            const domain = process.env.NEXT_PUBLIC_DOMAIN;
+        const domain = process.env.NEXT_PUBLIC_DOMAIN || "https://authjs-coral.vercel.app";
 
             const link = `${domain}/verify?token=${token.token}`
 
@@ -135,7 +135,7 @@ export async function register(data:z.infer<typeof RegisterSchema>) {
 
         const token = await getVerificationToken(email)
 
-        const domain = process.env.NEXT_PUBLIC_DOMAIN;
+        const domain = process.env.NEXT_PUBLIC_DOMAIN || "https://authjs-coral.vercel.app";
 
         const link = `${domain}/verify?token=${token.token}`
 
@@ -189,7 +189,7 @@ export async function forgetPassword(email:string) {
             return {success:false,message:"email is wrong"}
         }
         const forgetToken = await generateForgetPasswordToken(email);
-        const domain = process.env.NEXT_PUBLIC_DOMAIN;
+        const domain = process.env.NEXT_PUBLIC_DOMAIN || "https://authjs-coral.vercel.app";
         const link = `${domain}/reset-password?token=${forgetToken.token}`
         await sendLinkToResetPassword(email,link)
         return {
